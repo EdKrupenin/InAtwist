@@ -1,21 +1,20 @@
-package com.example.inatwist.categories.recyclerGrid
+package com.example.inatwist.movie.recyclerMovie
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.inatwist.R
-import com.example.inatwist.movie.recyclerMovie.MovieDataModel
 
-class CategoriesAdapter(private var onItemClick: (Int) -> Unit) :
-    RecyclerView.Adapter<CategoriesViewHolder>() {
-    private var items = mutableListOf<CategoriesDataModel>()
+class MovieAdapter(private var onItemClick: (Int) -> Unit) :
+    RecyclerView.Adapter<MovieViewHolder>() {
+    private var items = mutableListOf<MovieDataModel>()
 
-    fun setItems(newItems: List<CategoriesDataModel>) {
+    fun setItems(newItems: List<MovieDataModel>) {
         items = newItems.toMutableList()
         notifyDataSetChanged()
     }
 
-    fun addItems(newItems: List<CategoriesDataModel>) {
+    fun addItems(newItems: List<MovieDataModel>) {
         val size = items.size
         items.addAll(newItems)
         notifyItemInserted(size)
@@ -28,7 +27,7 @@ class CategoriesAdapter(private var onItemClick: (Int) -> Unit) :
         notifyItemRemoved(position)
     }
 
-    fun getItem(position: Int): CategoriesDataModel {
+    fun getItem(position: Int): MovieDataModel {
         return items[position]
     }
 
@@ -40,13 +39,13 @@ class CategoriesAdapter(private var onItemClick: (Int) -> Unit) :
      * create a new
      * ViewHolder and initializes some private fields to be used by RecyclerView.
      */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoriesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.card_of_category, parent, false)
-        return CategoriesViewHolder(view)
+        return MovieViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: CategoriesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bind(items[position], onItemClick)
 
     }

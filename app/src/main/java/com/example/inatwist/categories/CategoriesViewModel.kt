@@ -1,25 +1,26 @@
 package com.example.inatwist.categories
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.inatwist.categories.recyclerGrid.CategoriesMainPresenter
-import com.example.inatwist.categories.recyclerGrid.CategoriesModel
+import com.example.inatwist.categories.recyclerGrid.CategoriesDataModel
 
 
 class CategoriesViewModel : ViewModel() {
+    /** Controls for create new items and contain data */
     private val presenter by lazy { CategoriesMainPresenter() }
-    private val _data = MutableLiveData<List<CategoriesModel>>()
-    val data: LiveData<List<CategoriesModel>> get() = _data
+    /** List items on the screen */
+    private val _data = MutableLiveData<List<CategoriesDataModel>>()
+    val data: LiveData<List<CategoriesDataModel>> get() = _data
     fun getItem(itemCount: Int = 0) {
-        _data.postValue(presenter.getItem(itemCount))
-
+        _data.postValue(_data.value.orEmpty() + presenter.getItem(itemCount))
     }
 
-    fun createCategoriesGrid(recyclerView: RecyclerView, manager: GridLayoutManager) {
-
+    fun clicked(categoriesId: Int) {
+        var cashe = data.value?.find { it.categoriesId == categoriesId }
+        Log.d("VIEWMODEL", "click $categoriesId cashe = ${cashe.toString()}")
     }
 
 }
