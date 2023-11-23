@@ -41,12 +41,11 @@ class MovieAdapter(private var onItemClick: (Int) -> Unit) :
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.card_of_category, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.card_of_movie, parent, false)
         return MovieViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bind(items[position], onItemClick)
-
     }
 }

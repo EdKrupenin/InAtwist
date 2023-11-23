@@ -21,25 +21,17 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
 
     /** Controls loading data into the view model */
     private val categoriesViewModelInstance: CategoriesViewModel by viewModels()
-    private val manager by lazy { GridLayoutManager(context, 2) }
 
     /** Controls data and items into the recycler View */
     private val adapter by lazy {
         CategoriesAdapter()
-        { categoriesId -> goToNextScreen(categoriesId)
+        { categoriesId ->
+            goToNextScreen(categoriesId)
             // Handle the click event for the item at the specified position
         }
     }
 
-    /** Controls loading additional items into the recycler View */
-    private val paging by lazy {
-        PageScrollListener(manager).apply {
-            onLoadMore = {
-                categoriesViewModelInstance.getItem(adapter.itemCount)
-                setLoaded()
-            }
-        }
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,9 +43,18 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        val manager = GridLayoutManager(context, 2)
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
-        recyclerView.addOnScrollListener(paging)
+        /** Controls loading additional items into the recycler View */
+        recyclerView.addOnScrollListener(
+            PageScrollListener(manager).apply {
+                onLoadMore = {
+                    categoriesViewModelInstance.getItem(adapter.itemCount)
+                    setLoaded()
+                }
+            }
+        )
         categoriesViewModelInstance.getItem()
         categoriesViewModelInstance.data.value?.let { adapter.setItems(it) }
         categoriesViewModelInstance.data.observe(viewLifecycleOwner) { data ->

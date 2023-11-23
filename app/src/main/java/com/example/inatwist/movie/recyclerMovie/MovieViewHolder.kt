@@ -9,15 +9,15 @@ import com.example.inatwist.R
 
 class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bind(model: MovieDataModel, listener: (Int) -> Unit) {
-        /*itemView.findViewById<ImageView>(R.id.card_of_movie_poster)
-            .setImageResource(model.poster)*/
+        itemView.findViewById<ImageView>(R.id.movie_poster)
+            .setImageResource(model.poster)
 
-        itemView.findViewById<TextView>(R.id.card_of_movie_title).apply {
+        /*itemView.findViewById<TextView>(R.id.card_of_movie_title).apply {
             text = model.title
         }
 
         itemView.findViewById<TextView>(R.id.card_of_movie_discriptions).apply {
             text = model.descripon
-        }
+        }*/
     }
 }

@@ -1,12 +1,35 @@
 package com.example.inatwist.categories.recyclerGrid
 
-import com.example.inatwist.R
+import android.util.Log
+import com.example.inatwist.retrofit.CategoriesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class CategoriesMainPresenter {
-    private val posterList = listOf(null,null,null,null,null,null)
-    private val titleList = listOf("Support","Drama","Friend","Work","Comedy","Action")
 
-    fun getItem(startPosition: Int = 0): List<CategoriesDataModel> {
+class CategoriesMainPresenter() {
+    private val posterList = listOf(null, null, null, null, null, null)
+    private val titleList = listOf("Support", "Drama", "Friend", "Work", "Comedy", "Action")
+
+    private suspend fun getCategoriesFromApi(
+        startPosition: Int = 0,
+        limit: Int = 20,
+    ): List<CategoriesDataModel> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = CategoriesApi.apiService.getCategories(startPosition, limit)
+                response.categories
+            } catch (e: Exception) {
+                Log.e("CategoriesMainPresenter", "Error fetching categories data", e)
+                emptyList()
+            }
+        }
+    }
+
+    suspend fun getItem(startPosition: Int = 0): List<CategoriesDataModel> {
+        return getCategoriesFromApi(startPosition)
+    }
+
+    /*fun getItem(startPosition: Int = 0): List<CategoriesDataModel> {
         val mutableList = mutableListOf<CategoriesDataModel>()
         for (i in 1 .. 10) {
             val model = CategoriesDataModel(
@@ -17,5 +40,5 @@ class CategoriesMainPresenter {
             mutableList.add(model)
         }
         return mutableList
-    }
+    }*/
 }

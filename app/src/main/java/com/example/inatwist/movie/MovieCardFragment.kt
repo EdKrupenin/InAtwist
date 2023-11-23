@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.OnSwipe
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.inatwist.R
@@ -22,24 +24,19 @@ class MovieCardFragment : Fragment() {
 
     /** Controls loading data into the view model */
     private val moviesViewModelInstance: MovieCardViewModel by viewModels()
-    private val manager by lazy { LinearLayoutManager(context) }
 
     /** Controls data and items into the recycler View */
     private val adapter by lazy {
         MovieAdapter()
-        { categoriesId -> goToNextScreen(categoriesId)
+        { categoriesId ->
+            goToNextScreen(categoriesId)
             // Handle the click event for the item at the specified position
         }
     }
 
     /** Controls loading additional items into the recycler View */
     private val paging by lazy {
-        PageScrollListener(manager).apply {
-            onLoadMore = {
-                moviesViewModelInstance.getItem(adapter.itemCount)
-                setLoaded()
-            }
-        }
+
     }
 
 
@@ -52,15 +49,38 @@ class MovieCardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       /* val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewMovie)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewMovie)
+        val manager = LinearLayoutManager(context)
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
-        recyclerView.addOnScrollListener(paging)
+        recyclerView.addOnScrollListener(
+            PageScrollListener(manager).apply {
+                onLoadMore = {
+                    moviesViewModelInstance.getItem(adapter.itemCount)
+                    setLoaded()
+                }
+            }
+        )
+        // Callback for swiped cards
+        ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder,
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                adapter.removeItem(viewHolder.adapterPosition)
+            }
+        }).attachToRecyclerView(recyclerView)
         moviesViewModelInstance.getItem()
         moviesViewModelInstance.data.value?.let { adapter.setItems(it) }
         moviesViewModelInstance.data.observe(viewLifecycleOwner) { data ->
             adapter.setItems(data)
-        }*/
+        }
     }
 
     private fun goToNextScreen(categoriesId: Int) {
