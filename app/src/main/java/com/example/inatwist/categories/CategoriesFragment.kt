@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -31,31 +32,12 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
         }
     }
 
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_categories, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         val manager = GridLayoutManager(context, 2)
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
-        /** Controls loading additional items into the recycler View */
-        recyclerView.addOnScrollListener(
-            PageScrollListener(manager).apply {
-                onLoadMore = {
-                    categoriesViewModelInstance.getItem(adapter.itemCount)
-                    setLoaded()
-                }
-            }
-        )
-        categoriesViewModelInstance.getItem()
         categoriesViewModelInstance.data.value?.let { adapter.setItems(it) }
         categoriesViewModelInstance.data.observe(viewLifecycleOwner) { data ->
             adapter.setItems(data)

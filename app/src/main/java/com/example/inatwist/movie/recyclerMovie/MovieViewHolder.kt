@@ -5,19 +5,25 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.inatwist.R
+import com.squareup.picasso.Picasso
 
 
-class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    fun bind(model: MovieDataModel, listener: (Int) -> Unit) {
-        itemView.findViewById<ImageView>(R.id.movie_poster)
-            .setImageResource(model.poster)
-
-        /*itemView.findViewById<TextView>(R.id.card_of_movie_title).apply {
-            text = model.title
+class MovieViewHolder(
+    view: View,
+    private val onItemActionSwiped: (Int) -> Unit,
+) : RecyclerView.ViewHolder(view) {
+    fun bind(model: MovieDataModel) {
+        Picasso.get()
+            .load(model.posterUrl)
+            .into(itemView.findViewById<ImageView>(R.id.movie_poster))
+        itemView.setOnClickListener{
+            onItemActionSwiped.invoke(absoluteAdapterPosition)
         }
-
-        itemView.findViewById<TextView>(R.id.card_of_movie_discriptions).apply {
-            text = model.descripon
-        }*/
+        itemView.findViewById<TextView>(R.id.movie_title).apply {
+            text = model.nameRu
+        }
+        itemView.findViewById<TextView>(R.id.movie_IMBd_rating).apply {
+            text = model.ratingImdb.toString()
+        }
     }
 }

@@ -15,6 +15,6 @@ class CategoriesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             text = model.genre
         }
 
-        itemView.setOnClickListener { listener(model.id) }
+        itemView.setOnClickListener { listener.invoke(model.id) }
     }
 }

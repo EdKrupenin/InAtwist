@@ -18,5 +18,6 @@
         android:id="@+id/movieCardFragment"
         android:name="com.example.inatwist.movie.MovieCardFragment"
         android:label="fragment_movie_card"
-        tools:layout="@layout/fragment_movie_card" />
+        tools:layout="@layout/fragment_movie_card" >
+    </fragment>
 </navigation>

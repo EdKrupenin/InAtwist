@@ -1,7 +1,7 @@
 package com.example.inatwist.categories.recyclerGrid
 
 import android.util.Log
-import com.example.inatwist.retrofit.CategoriesApi
+import com.example.inatwist.retrofit.KinopoiskApiUnofficial
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -10,13 +10,10 @@ class CategoriesMainPresenter() {
     private val posterList = listOf(null, null, null, null, null, null)
     private val titleList = listOf("Support", "Drama", "Friend", "Work", "Comedy", "Action")
 
-    private suspend fun getCategoriesFromApi(
-        startPosition: Int = 0,
-        limit: Int = 20,
-    ): List<CategoriesDataModel> {
+    private suspend fun getCategoriesFromApi(): List<CategoriesDataModel> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = CategoriesApi.apiService.getCategories(startPosition, limit)
+                val response = KinopoiskApiUnofficial.categoriesApiService.getCategories()
                 response.categories
             } catch (e: Exception) {
                 Log.e("CategoriesMainPresenter", "Error fetching categories data", e)
@@ -25,8 +22,8 @@ class CategoriesMainPresenter() {
         }
     }
 
-    suspend fun getItem(startPosition: Int = 0): List<CategoriesDataModel> {
-        return getCategoriesFromApi(startPosition)
+    suspend fun getItem(): List<CategoriesDataModel> {
+        return getCategoriesFromApi()
     }
 
     /*fun getItem(startPosition: Int = 0): List<CategoriesDataModel> {

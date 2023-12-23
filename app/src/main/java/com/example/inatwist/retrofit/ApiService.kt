@@ -1,6 +1,7 @@
 package com.example.inatwist.retrofit
 
 import com.example.inatwist.categories.recyclerGrid.CategoriesDataModel
+import com.example.inatwist.movie.recyclerMovie.MovieDataModel
 import com.google.gson.annotations.SerializedName
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -14,13 +15,33 @@ import retrofit2.http.Query
 interface CategoriesApiService {
     @GET("v2.2/films/filters")
     @Headers("Content-Type: application/json")
-    suspend fun getCategories(@Query("startPosition") startPosition: Int, @Query("limit") limit: Int): CategoriesResponse
+    suspend fun getCategories(): CategoriesResponse
 }
 
 data class CategoriesResponse(
     @SerializedName("genres") val categories: List<CategoriesDataModel>,
 )
 
+//https://kinopoiskapiunofficial.tech/api/v2.2/films?genres=3&order=RATING&type=ALL&ratingFrom=0&ratingTo=10&yearFrom=1000&yearTo=3000&page=1
+interface MovieApiService {
+    @GET("v2.2/films/Films")
+    @Headers("Content-Type: application/json")
+    suspend fun getMovies(
+        @Query("genres") genres: Int,
+        @Query("order") order: String = "RATING",
+        @Query("type") type: String = "FILM",
+        @Query("ratingFrom") ratingFrom: Int = 0,
+        @Query("ratingTo") ratingTo: Int = 10,
+        @Query("yearFrom") yearFrom: Int = 1000,
+        @Query("yearTo") yearTo: Int = 3000,
+        @Query("page") page: Int,
+    ): MovieResponse
+}
+
+data class MovieResponse(
+    @SerializedName("items") val movie: List<MovieDataModel>,
+    @SerializedName("totalPages") val totalPages: Int,
+)
 
 private fun getHeaderClient(): OkHttpClient? {
     val builder = OkHttpClient.Builder()
@@ -35,7 +56,7 @@ private fun getHeaderClient(): OkHttpClient? {
     return builder.build()
 }
 
-object CategoriesApi {
+object KinopoiskApiUnofficial {
     private const val BASE_URL = "https://kinopoiskapiunofficial.tech/api/"
 
     private val retrofit = Retrofit.Builder()
@@ -44,5 +65,7 @@ object CategoriesApi {
         .client(getHeaderClient())
         .build()
 
-    val apiService: CategoriesApiService = retrofit.create(CategoriesApiService::class.java)
+    val categoriesApiService: CategoriesApiService =
+        retrofit.create(CategoriesApiService::class.java)
+    val movieApiService: MovieApiService = retrofit.create(MovieApiService::class.java)
 }
