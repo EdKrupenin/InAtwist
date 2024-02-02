@@ -7,7 +7,7 @@ sealed interface MovieItem {
 }
 data class MovieDataModel(
     val kinopoiskId: Long,
-    val imdbId: Int,
+    val imdbId: String,
     val nameRu: String,
     val nameEn: String,
     val nameOriginal: String,

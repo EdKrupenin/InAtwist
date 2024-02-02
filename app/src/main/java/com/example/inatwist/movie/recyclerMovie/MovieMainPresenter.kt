@@ -15,12 +15,12 @@ class MovieMainPresenter {
             try {
                 val response = KinopoiskApiUnofficial.movieApiService.getMovies(
                     DataCache.category,
-                    "RATING",
+                    //"RATING",
                     "FILM",
-                    0,
-                    10,
-                    1000,
-                    3000,
+                    //0,
+                    //10,
+                   // 1000,
+                   // 3000,
                     paging
                 )
                 response.movie

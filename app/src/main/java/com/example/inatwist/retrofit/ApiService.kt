@@ -24,16 +24,16 @@ data class CategoriesResponse(
 
 //https://kinopoiskapiunofficial.tech/api/v2.2/films?genres=3&order=RATING&type=ALL&ratingFrom=0&ratingTo=10&yearFrom=1000&yearTo=3000&page=1
 interface MovieApiService {
-    @GET("v2.2/films/Films")
+    @GET("v2.2/films")
     @Headers("Content-Type: application/json")
     suspend fun getMovies(
         @Query("genres") genres: Int,
-        @Query("order") order: String = "RATING",
+        //@Query("order") order: String = "RATING",
         @Query("type") type: String = "FILM",
-        @Query("ratingFrom") ratingFrom: Int = 0,
+        /*@Query("ratingFrom") ratingFrom: Int = 0,
         @Query("ratingTo") ratingTo: Int = 10,
         @Query("yearFrom") yearFrom: Int = 1000,
-        @Query("yearTo") yearTo: Int = 3000,
+        @Query("yearTo") yearTo: Int = 3000,*/
         @Query("page") page: Int,
     ): MovieResponse
 }
